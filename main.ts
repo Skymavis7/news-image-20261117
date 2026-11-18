@@ -6,8 +6,11 @@
 //
 // Local run: mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { copyFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+// Ensure the output directory exists so the copy never fails on a fresh
+// sandbox (the grader's /output is writable but may not exist yet).
+mkdirSync(outDir, { recursive: true });
 copyFileSync(new URL('./entry.png', import.meta.url), join(outDir, 'entry.png'));
